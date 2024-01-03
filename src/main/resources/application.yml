@@ -5,3 +5,4 @@ spring:
     password: ${DB_PASSWORD}
   jpa:
     show-sql: true
+openweathermap.key: ${OPENAPI_KEY}

@@ -1,22 +1,26 @@
 package com.zerobase.weatherservice.domain;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import java.time.LocalDate;
 
 @Getter
 @Setter
-@RequiredArgsConstructor
-@NoArgsConstructor
+@Builder
 @Entity
-public class Memo {
+@NoArgsConstructor
+@AllArgsConstructor
+public class Diary {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private int id;
+    private String weather;
+    private String icon;
+    private double temperature;
+    private String text;
+    private LocalDate date;
 }
