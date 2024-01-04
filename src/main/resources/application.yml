@@ -6,3 +6,4 @@ spring:
   jpa:
     show-sql: true
 openweathermap.key: ${OPENAPI_KEY}
+logging.config: classpath:logback-spring.xml
