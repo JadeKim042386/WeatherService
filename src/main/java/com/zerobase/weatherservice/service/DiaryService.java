@@ -1,6 +1,8 @@
 package com.zerobase.weatherservice.service;
 
+import com.zerobase.weatherservice.domain.DateWeather;
 import com.zerobase.weatherservice.domain.Diary;
+import com.zerobase.weatherservice.repository.DateWeatherRepository;
 import com.zerobase.weatherservice.repository.DiaryRepository;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONArray;
@@ -8,6 +10,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,23 +30,34 @@ import java.util.Map;
 public class DiaryService {
 
     private final DiaryRepository diaryRepository;
+    private final DateWeatherRepository dateWeatherRepository;
 
     @Value("${openweathermap.key}")
     private String apiKey;
 
+    /**
+     * 매일 01시마다 실행
+     */
+    @Transactional
+    @Scheduled(cron = "0 0 1 * * * ")
+    public void saveWeatherDate() {
+        dateWeatherRepository.save(getWeatherFromApi());
+    }
+
+    private DateWeather getDateWeather(LocalDate date) {
+        List<DateWeather> dateWeatherListFromDB = dateWeatherRepository.findAllByDate(date);
+        if (dateWeatherListFromDB.isEmpty()){
+            return getWeatherFromApi();
+        } else {
+            return dateWeatherListFromDB.get(0);
+        }
+    }
+
     @Transactional
     public void createDiary(LocalDate date, String text) {
-        String weatherData = getWeatherString();
-        Map<String, Object> parsedWeather = parseWeather(weatherData);
-        diaryRepository.save(
-                Diary.builder()
-                        .weather(parsedWeather.get("main").toString())
-                        .icon(parsedWeather.get("icon").toString())
-                        .temperature((Double) parsedWeather.get("temp"))
-                        .text(text)
-                        .date(date)
-                        .build()
-        );
+        Diary diary = Diary.setDateWeather(getDateWeather(date));
+        diary.setText(text);
+        diaryRepository.save(diary);
     }
 
     public List<Diary> readDiary(LocalDate date) {
@@ -108,5 +122,16 @@ public class DiaryService {
         resultMap.put("main", weatherData.get("main"));
         resultMap.put("icon", weatherData.get("icon"));
         return resultMap;
+    }
+
+    private DateWeather getWeatherFromApi() {
+        String weatherData = getWeatherString();
+        Map<String, Object> parsedWeather = parseWeather(weatherData);
+        return DateWeather.builder()
+                    .date(LocalDate.now())
+                    .weather(parsedWeather.get("main").toString())
+                    .icon(parsedWeather.get("icon").toString())
+                    .temperature((Double) parsedWeather.get("temp"))
+                    .build();
     }
 }
