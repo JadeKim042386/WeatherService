@@ -1,4 +1,4 @@
-package com.zerobase.weatherservice.dto;
+package com.zerobase.weatherservice.dto.response;
 
 import com.zerobase.weatherservice.exception.ErrorCode;
 import lombok.*;

@@ -3,6 +3,7 @@ package com.zerobase.weatherservice.service;
 import com.zerobase.weatherservice.WeatherServiceApplication;
 import com.zerobase.weatherservice.domain.DateWeather;
 import com.zerobase.weatherservice.domain.Diary;
+import com.zerobase.weatherservice.dto.DiaryDto;
 import com.zerobase.weatherservice.dto.property.ApiProperties;
 import com.zerobase.weatherservice.exception.DiaryException;
 import com.zerobase.weatherservice.repository.DateWeatherRepository;
@@ -14,7 +15,6 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -29,6 +29,7 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static com.zerobase.weatherservice.exception.ErrorCode.*;
 
@@ -69,12 +70,14 @@ public class DiaryService {
         }
     }
 
-    public List<Diary> readDiary(LocalDate date) {
-        return diaryRepository.findAllByDate(date);
+    public List<DiaryDto> readDiary(LocalDate date) {
+        return diaryRepository.findAllByDate(date).stream()
+                .map(DiaryDto::fromEntity).collect(Collectors.toList());
     }
 
-    public List<Diary> readDiaries(LocalDate startDate, LocalDate endDate) {
-        return diaryRepository.findAllByDateBetween(startDate, endDate);
+    public List<DiaryDto> readDiaries(LocalDate startDate, LocalDate endDate) {
+        return diaryRepository.findAllByDateBetween(startDate, endDate).stream()
+                .map(DiaryDto::fromEntity).collect(Collectors.toList());
     }
 
     @Transactional

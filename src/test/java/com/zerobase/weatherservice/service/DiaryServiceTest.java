@@ -2,12 +2,11 @@ package com.zerobase.weatherservice.service;
 
 import com.zerobase.weatherservice.domain.DateWeather;
 import com.zerobase.weatherservice.domain.Diary;
+import com.zerobase.weatherservice.dto.DiaryDto;
 import com.zerobase.weatherservice.dto.property.ApiProperties;
 import com.zerobase.weatherservice.exception.DiaryException;
-import com.zerobase.weatherservice.exception.ErrorCode;
 import com.zerobase.weatherservice.repository.DateWeatherRepository;
 import com.zerobase.weatherservice.repository.DiaryRepository;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -92,8 +91,9 @@ class DiaryServiceTest {
         given(diaryRepository.findAllByDate(any()))
                 .willReturn(List.of(generateDiary()));
         //when
-        diaryService.readDiary(LocalDate.now());
+        List<DiaryDto> diaryDtos = diaryService.readDiary(LocalDate.now());
         //then
+        assertThat(diaryDtos.size()).isEqualTo(1);
     }
 
     @DisplayName("주어진 날짜 기간의 다이어리 조회")
@@ -103,8 +103,9 @@ class DiaryServiceTest {
         given(diaryRepository.findAllByDateBetween(any(), any()))
                 .willReturn(List.of(generateDiary()));
         //when
-        diaryService.readDiaries(LocalDate.now().minusDays(3), LocalDate.now());
+        List<DiaryDto> diaryDtos = diaryService.readDiaries(LocalDate.now().minusDays(3), LocalDate.now());
         //then
+        assertThat(diaryDtos.size()).isEqualTo(1);
     }
 
     @DisplayName("특정 날짜의 다이어리 수정")
