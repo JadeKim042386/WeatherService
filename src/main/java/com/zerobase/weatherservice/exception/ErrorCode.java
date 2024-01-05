@@ -6,7 +6,7 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum ErrorCode {
-    INTERNAL_SERVER_ERROR("내부 서버 오류가 발생했습니다."),
+    INTERNAL_SERVER_ERROR_CODE("내부 서버 오류가 발생했습니다."),
     INVALID_REQUEST("잘못된 요청입니다."),
     NOT_FOUND_DIARY("다이어리가 존재하지 않습니다."),
     FAILED_GET_FROM_API("API로부터 데이터를 가져오는데 실패했습니다."),
