@@ -1,15 +1,17 @@
 package com.zerobase.weatherservice.exception;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class DiaryException extends RuntimeException {
-    private ErrorCode errorCode;
-    private String errorMessage;
+    private final ErrorCode errorCode;
+    private final String errorMessage;
 
     public DiaryException(ErrorCode errorCode) {
         this.errorCode = errorCode;
