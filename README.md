@@ -1,4 +1,4 @@
-# 날씨 일기 작성 API [25 Days]
+# 날씨 일기 작성 API [2024.01.03 ~ 2024.01.27]
 
 ## Development Environment
 
