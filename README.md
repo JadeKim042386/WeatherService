@@ -6,6 +6,7 @@
 - Java 17
 - Gradle 7.4.1
 - Spring Boot 2.7.18
+- [openweathermap](https://openweathermap.org/)
 
 ## API
 
